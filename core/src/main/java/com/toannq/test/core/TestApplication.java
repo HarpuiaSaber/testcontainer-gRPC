@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.toannq.test")
+@ComponentScan(basePackages = {"com.toannq.test.core*", "com.toannq.test.commons*"})
 public class TestApplication {
 
 

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_package = "com.toannq.test.core.service";
+option java_outer_classname = "MajorServiceProto";
+
+package service;
+
+service MajorService {
+  rpc GetMajor(MajorRequest) returns (MajorResponse) {}
+}
+
+message MajorRequest {
+  int32 id = 1;
+}
+
+message MajorResponse {
+  int32 id = 1;
+  string code = 2;
+  string name = 3;
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "service": "MentorService",
+    "method": "GetMentor",
+    "input": {
+      "equals": {
+        "id": 1
+      }
+    },
+    "output": {
+      "data": {
+        "id": 1,
+        "name": "Mentor 123456"
+      }
+    }
+  }
+]

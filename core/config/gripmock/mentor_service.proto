@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_package = "com.toannq.test.core.service";
+option java_outer_classname = "MentorServiceProto";
+
+package service;
+
+service MentorService {
+  rpc GetMentor(MentorRequest) returns (MentorResponse) {}
+}
+
+message MentorRequest {
+  int64 id = 1;
+}
+
+message MentorResponse {
+  int64 id = 1;
+  string name = 2;
+}

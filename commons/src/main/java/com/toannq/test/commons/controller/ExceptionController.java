@@ -7,9 +7,9 @@ import com.toannq.test.commons.exception.FieldViolation;
 import com.toannq.test.commons.model.response.Response;
 import com.toannq.test.commons.util.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
-import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.Arrays;
@@ -59,22 +58,22 @@ public class ExceptionController {
                         Collectors.toList());
         var errorResponse = Response.ofFailed(ErrorCode.INVALID_FIELD_FORMAT, "Invalid field format",
                 violations);
-        log.error("{}", errorResponse, e);
-        return handle(ErrorCode.INVALID_FIELD_FORMAT);
+        log.error("Error", e);
+        return handle(ErrorCode.INVALID_FIELD_FORMAT.httpStatus(), errorResponse, request);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Response<Void>> handleConstraintValidationException(
-            ConstraintViolationException e, HttpServletRequest request) throws IOException {
-        List<FieldViolation> violations = e.getConstraintViolations().stream()
-                .map(violation -> new FieldViolation(((PathImpl) violation.getPropertyPath()).getLeafNode().getParent().getName(),
-                        violation.getMessage()))
-                .collect(Collectors.toList());
-        var errorResponse = Response.ofFailed(ErrorCode.INVALID_FIELD_FORMAT, "Invalid field format",
-                violations);
-        log.error("{}", errorResponse, e);
-        writeResponse(ErrorCode.INVALID_FIELD_FORMAT.httpStatus(), errorResponse);
-    }
+//    @ExceptionHandler(ConstraintViolationException.class)
+//    public ResponseEntity<Response<Void>> handleConstraintValidationException(
+//            ConstraintViolationException e, HttpServletRequest request) throws IOException {
+//        List<FieldViolation> violations = e.getConstraintViolations().stream()
+//                .map(violation -> new FieldViolation(((PathImpl) violation.getPropertyPath()).getLeafNode().getParent().getName(),
+//                        violation.getMessage()))
+//                .collect(Collectors.toList());
+//        var errorResponse = Response.ofFailed(ErrorCode.INVALID_FIELD_FORMAT, "Invalid field format",
+//                violations);
+//        log.error("Error", e);
+//        return handle(ErrorCode.INVALID_FIELD_FORMAT.httpStatus(), errorResponse, request);
+//    }
 
 //    @ExceptionHandler(DataIntegrityViolationException.class)
 //    public ResponseEntity<Response<Void>> handleDataIntegrityViolationException(
@@ -101,8 +100,8 @@ public class ExceptionController {
                 Collectors.toList());
         var errorResponse = Response.ofFailed(ErrorCode.INVALID_FIELD_FORMAT, "Invalid field format",
                 violations);
-        log.error("{}", errorResponse, e);
-        writeResponse(ErrorCode.INVALID_FIELD_FORMAT.httpStatus(), errorResponse);
+        log.error("Error", e);
+        return handle(ErrorCode.INVALID_FIELD_FORMAT.httpStatus(), errorResponse, request);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -116,8 +115,8 @@ public class ExceptionController {
         }
         var fieldViolation = new FieldViolation(e.getName(), description);
         var errorResponse = Response.ofFailed(ErrorCode.INVALID_FIELD_FORMAT, Collections.singletonList(fieldViolation));
-        log.error("{}", errorResponse, e);
-        writeResponse(ErrorCode.INVALID_FIELD_FORMAT.httpStatus(), errorResponse);
+        log.error("Error", e);
+        return handle(ErrorCode.INVALID_FIELD_FORMAT.httpStatus(), errorResponse, request);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -138,8 +137,8 @@ public class ExceptionController {
         }
         var fieldViolation = new FieldViolation(fieldName, description);
         var errorResponse = Response.ofFailed(ErrorCode.INVALID_FIELD_FORMAT, Collections.singletonList(fieldViolation));
-        log.error("{}", errorResponse, e);
-        writeResponse(ErrorCode.INVALID_FIELD_FORMAT.httpStatus(), errorResponse);
+        log.error("Error", e);
+        return handle(ErrorCode.INVALID_FIELD_FORMAT.httpStatus(), errorResponse, request);
     }
 
 
@@ -177,5 +176,10 @@ public class ExceptionController {
         var errorResponse = Response.ofFailed(errorCode, e.getMessage());
         log.error("Request: {} {}, Response: {}", request.getMethod(), request.getRequestURL(), errorResponse, e);
         return ResponseEntity.status(errorCode.httpStatus()).body(errorResponse);
+    }
+
+    private <T extends Exception> ResponseEntity<Response<Void>> handle(int httpStatus, Response<Void> response, HttpServletRequest request) throws IOException {
+        log.error("Request: {} {}, Response: {}", request.getMethod(), request.getRequestURL(), response);
+        return ResponseEntity.status(httpStatus).body(response);
     }
 }

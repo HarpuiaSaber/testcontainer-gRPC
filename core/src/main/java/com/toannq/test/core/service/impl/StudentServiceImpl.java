@@ -1,52 +1,86 @@
 package com.toannq.test.core.service.impl;
 
-import com.github.benmanes.caffeine.cache.AsyncCache;
+import com.toannq.test.commons.exception.BusinessException;
+import com.toannq.test.commons.util.ErrorCode;
+import com.toannq.test.core.grpc.MajorService;
+import com.toannq.test.core.grpc.MentorService;
+import com.toannq.test.core.mapper.CreateStudentRequest2Entity;
+import com.toannq.test.core.mapper.Entity2DetailStudentResponse;
 import com.toannq.test.core.mapper.Entity2StudentResponse;
+import com.toannq.test.core.mapper.UpdateStudentRequest2Entity;
 import com.toannq.test.core.model.entity.Student;
+import com.toannq.test.core.model.request.CreateStudentRequest;
+import com.toannq.test.core.model.request.UpdateStudentRequest;
+import com.toannq.test.core.model.response.DetailStudentResponse;
 import com.toannq.test.core.model.response.StudentResponse;
-import com.toannq.test.core.service.StudentService;
+import com.toannq.test.core.repository.StudentRepository;
+import com.toannq.test.core.service.StudentServiceInternal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class StudentServiceImpl implements StudentService {
-    private final AsyncCache<String, Map<Long, Student>> studentCache;
+public class StudentServiceImpl implements StudentServiceInternal {
+
+    private final StudentRepository studentRepository;
+    private final MajorService majorService;
+    private final MentorService mentorService;
 
     @Override
-    public CompletableFuture<StudentResponse> get(Long id) {
-        return getAllStudentAsMap()
-                .thenApply(studentMap -> studentMap.get(id))
-                .thenApply(Entity2StudentResponse.INSTANCE::map);
+    public StudentResponse get(Long id) {
+        var student = get0(id);
+        return Entity2StudentResponse.INSTANCE.map(student);
     }
 
-    private CompletableFuture<List<Student>> getAllStudent() {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            return List.of(
-                    new Student(1L, "A", 25),
-                    new Student(2L, "B", 24),
-                    new Student(3L, "C", 26),
-                    new Student(4L, "D", 23),
-                    new Student(5L, "E", 27),
-                    new Student(6L, "F", 22),
-                    new Student(7L, "G", 28)
-            );
-        });
+    @Override
+    public StudentResponse create(CreateStudentRequest request) {
+        var student = CreateStudentRequest2Entity.INSTANCE.map(request);
+        var insertedStudent = insert(student);
+        return Entity2StudentResponse.INSTANCE.map(insertedStudent);
     }
 
-    private CompletableFuture<Map<Long, Student>> getAllStudentAsMap() {
-        return studentCache.get("ST", (k, executor) -> getAllStudent()
-                .thenApply(students -> students.stream()
-                        .collect(Collectors.toMap(Student::getId, s -> s))));
+    @Override
+    public StudentResponse update(Long id, UpdateStudentRequest request) {
+        var student = UpdateStudentRequest2Entity.INSTANCE.map(request);
+        var updatedStudent = update(id, student);
+        return Entity2StudentResponse.INSTANCE.map(updatedStudent);
+    }
+
+    @Override
+    public void delete(Long id) {
+        deleteById(id);
+    }
+
+    @Override
+    public CompletableFuture<DetailStudentResponse> getDetail(Long id) {
+        var student = get0(id);
+        return majorService.getMajor(student.getMajorId())
+                .thenCombine(mentorService.getMentor(student.getMentorId()),
+                        (majorResponse, mentorResponse) -> Entity2DetailStudentResponse.INSTANCE.map(student, majorResponse, mentorResponse));
+    }
+
+    @Override
+    public Student get0(Long id) {
+        return studentRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.DATA_NOT_FOUND, "Student with id " + id + " is not exist"));
+    }
+
+    @Override
+    public Student insert(Student student) {
+        return studentRepository.insert(student);
+    }
+
+    @Override
+    public Student update(Long id, Student student) {
+        return studentRepository.update(id, student);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if (studentRepository.delete(id) <= 0) {
+            throw new BusinessException(ErrorCode.DATA_NOT_FOUND, "Student with id " + id + " is not exist");
+        }
     }
 }

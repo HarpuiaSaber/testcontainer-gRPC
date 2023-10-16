@@ -1,0 +1,25 @@
+version: "2.1"
+
+services:
+  gripmock:
+    image: tkpd/gripmock
+    ports:
+      - "4770:4770"
+      - "4771:4771"
+    volumes:
+      - ./gripmock:/mock
+    command: >
+      --stub=/mock/stub /mock/major_service.proto /mock/mentor_service.proto
+
+  postgres:
+    image: postgres
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test-123456
+    tmpfs:
+      - /var/lib/postgresql/data:rw
+    volumes:
+      - $MODULE_HOME/config/db.migration:/docker-entrypoint-initdb.d
