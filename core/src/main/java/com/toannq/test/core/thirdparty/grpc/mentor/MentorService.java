@@ -1,4 +1,4 @@
-package com.toannq.test.core.grpc;
+package com.toannq.test.core.thirdparty.grpc.mentor;
 
 import com.toannq.test.core.service.MentorServiceProto;
 

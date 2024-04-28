@@ -1,4 +1,4 @@
-package com.toannq.test.core.grpc;
+package com.toannq.test.core.thirdparty.grpc.major;
 
 import com.toannq.test.core.service.MajorServiceProto;
 

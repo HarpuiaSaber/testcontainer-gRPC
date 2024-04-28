@@ -1,8 +1,5 @@
-package com.toannq.test.core.grpc.impl;
+package com.toannq.test.core.thirdparty.grpc.mentor;
 
-import com.toannq.test.commons.exception.BusinessException;
-import com.toannq.test.commons.util.ErrorCode;
-import com.toannq.test.core.grpc.MentorService;
 import com.toannq.test.core.service.MentorServiceGrpc;
 import com.toannq.test.core.service.MentorServiceProto;
 import com.toannq.test.core.util.CompletableFutures;
@@ -25,15 +22,7 @@ public class MentorServiceImpl implements MentorService {
     @Override
     public CompletableFuture<MentorServiceProto.MentorResponse> getMentor(long id) {
         var request = MentorServiceProto.MentorRequest.newBuilder().setId(id).build();
-        return CompletableFutures.toCompletableFuture(futureStub.getMentor(request))
-                .handle((response, throwable) -> {
-                    if (throwable != null) {
-                        var cause = throwable.getCause();
-                        log.error("Error to get major with id {}", id, cause);
-                        throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, cause.getMessage());
-                    }
-                    return response;
-                });
+        return CompletableFutures.toCompletableFuture(futureStub.getMentor(request));
     }
 
 }

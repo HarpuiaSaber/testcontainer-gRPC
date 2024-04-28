@@ -7,10 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 public interface StudentRepository extends JpaRepository<Student, Long>, InsertUpdateRepository<Student> {
 
     @Query(value = "update student set name = :#{#student.name}, age = :#{#student.age} where id = :id returning *", nativeQuery = true)
-    Student update(@Param("id") Long id, Student student);
+    Optional<Student> update(@Param("id") Long id, Student student);
 
     @Transactional
     @Modifying

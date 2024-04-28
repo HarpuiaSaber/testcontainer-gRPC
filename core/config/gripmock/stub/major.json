@@ -14,5 +14,31 @@
         "name": "Information Technology 1"
       }
     }
+  },
+  {
+    "service": "MajorService",
+    "method": "GetMajor",
+    "input": {
+      "equals": {
+        "id": 2
+      }
+    },
+    "output": {
+      "code": "NOT_FOUND",
+      "error": "Major with id 2 is not exist"
+    }
+  },
+  {
+    "service": "MajorService",
+    "method": "GetMajor",
+    "input": {
+      "equals": {
+        "id": 99
+      }
+    },
+    "output": {
+      "code": "DEADLINE_EXCEEDED",
+      "error": "Time out"
+    }
   }
 ]

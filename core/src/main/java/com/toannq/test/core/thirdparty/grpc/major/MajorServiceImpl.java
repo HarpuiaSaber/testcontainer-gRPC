@@ -1,8 +1,5 @@
-package com.toannq.test.core.grpc.impl;
+package com.toannq.test.core.thirdparty.grpc.major;
 
-import com.toannq.test.commons.exception.BusinessException;
-import com.toannq.test.commons.util.ErrorCode;
-import com.toannq.test.core.grpc.MajorService;
 import com.toannq.test.core.service.MajorServiceGrpc;
 import com.toannq.test.core.service.MajorServiceProto;
 import com.toannq.test.core.util.CompletableFutures;
@@ -24,14 +21,6 @@ public class MajorServiceImpl implements MajorService {
     @Override
     public CompletableFuture<MajorServiceProto.MajorResponse> getMajor(int id) {
         var request = MajorServiceProto.MajorRequest.newBuilder().setId(id).build();
-        return CompletableFutures.toCompletableFuture(futureStub.getMajor(request))
-                .handle((response, throwable) -> {
-                    if (throwable != null) {
-                        var cause = throwable.getCause();
-                        log.error("Error to get major with id {}", id, cause);
-                        throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, cause.getMessage());
-                    }
-                    return response;
-                });
+        return CompletableFutures.toCompletableFuture(futureStub.getMajor(request));
     }
 }

@@ -25,6 +25,12 @@ public class ErrorCode {
             new BusinessErrorCode(4004, "Invalid field format", 400);
     public static final BusinessErrorCode DATA_NOT_FOUND =
             new BusinessErrorCode(4005, "Data not found", 404);
+    public static final BusinessErrorCode MAJOR_SERVER_ERROR =
+            new BusinessErrorCode(5010, "Major server error", 500);
+    public static final BusinessErrorCode MENTOR_SERVER_ERROR =
+            new BusinessErrorCode(5011, "Mentor server error", 500);
+
+
 
 
     static {

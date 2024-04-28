@@ -13,5 +13,31 @@
         "name": "Mentor 123456"
       }
     }
+  },
+  {
+    "service": "MentorService",
+    "method": "GetMentor",
+    "input": {
+      "equals": {
+        "id": 2
+      }
+    },
+    "output": {
+      "code": "NOT_FOUND",
+      "error": "Major with id 2 is not exist"
+    }
+  },
+  {
+    "service": "MentorService",
+    "method": "GetMentor",
+    "input": {
+      "equals": {
+        "id": 99
+      }
+    },
+    "output": {
+      "code": "DEADLINE_EXCEEDED",
+      "error": "Time out"
+    }
   }
 ]
