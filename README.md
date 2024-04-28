@@ -16,9 +16,9 @@ Testing includes:
 
 Simple demo with services and relationships bellow:
 <ul>
-<li>Student Service: Spring Boot.</li>
-<li>Database: Postgresql.</li>
-<li>Major Service, Mentor Service: Mock Service.</li>
+  <li>Student Service: Spring Boot.</li>
+  <li>Database: Postgresql.</li>
+  <li>Major Service, Mentor Service: GripMock.</li>
 </ul>
 
 ![alt text](https://github.com/HarpuiaSaber/test/assets/45726017/ac827fcf-2c89-4748-80b9-9d384c1cfdfe)
