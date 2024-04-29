@@ -5,6 +5,7 @@ import com.toannq.test.core.service.MentorServiceProto;
 import com.toannq.test.core.util.CompletableFutures;
 import io.grpc.Channel;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
@@ -15,7 +16,7 @@ public class MentorServiceImpl implements MentorService {
 
     private final MentorServiceGrpc.MentorServiceFutureStub futureStub;
 
-    public MentorServiceImpl(Channel channel) {
+    public MentorServiceImpl(@Qualifier("mentorChannel")Channel channel) {
         futureStub = MentorServiceGrpc.newFutureStub(channel);
     }
 

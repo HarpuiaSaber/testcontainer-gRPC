@@ -5,6 +5,7 @@ import com.toannq.test.core.service.MajorServiceProto;
 import com.toannq.test.core.util.CompletableFutures;
 import io.grpc.Channel;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
@@ -14,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public class MajorServiceImpl implements MajorService {
     private final MajorServiceGrpc.MajorServiceFutureStub futureStub;
 
-    public MajorServiceImpl(Channel channel) {
+    public MajorServiceImpl(@Qualifier("mayjorChannel") Channel channel) {
         futureStub = MajorServiceGrpc.newFutureStub(channel);
     }
 
