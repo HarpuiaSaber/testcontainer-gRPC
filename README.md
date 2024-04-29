@@ -3,7 +3,7 @@
 <strong>
 Requires:
   <ul>
-    <li>Java 17 or later.</li>
+    <li>Java 17.</li>
     <li>Docker Compose 2.1+ and Docker with compatible version.</li>
   </ul>
 </strong>
