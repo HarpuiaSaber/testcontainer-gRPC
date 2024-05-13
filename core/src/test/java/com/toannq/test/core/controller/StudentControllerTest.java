@@ -23,7 +23,14 @@ class StudentControllerTest extends ApplicationTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/students")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Lê Tuấn Khanh\",\"age\":20,\"major_id\":1,\"mentor_id\":1}"))
+                        .content("""
+                                {
+                                  "name": "Lê Tuấn Khanh",
+                                  "age": 20,
+                                  "major_id": 1,
+                                  "mentor_id": 1
+                                }
+                                """))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(1))
                 .andExpect(jsonPath("$.data.name").value("Lê Tuấn Khanh"))
@@ -32,7 +39,14 @@ class StudentControllerTest extends ApplicationTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/students")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Nguyễn Xuân Thụy\",\"age\":21,\"major_id\":1,\"mentor_id\":1}"))
+                        .content("""
+                                {
+                                  "name": "Nguyễn Xuân Thụy",
+                                  "age": 21,
+                                  "major_id": 1,
+                                  "mentor_id": 1
+                                }
+                                """))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(2))
                 .andExpect(jsonPath("$.data.name").value("Nguyễn Xuân Thụy"))
@@ -46,7 +60,12 @@ class StudentControllerTest extends ApplicationTest {
         mockMvc.perform(MockMvcRequestBuilders.put("/students/123")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Nguyễn Xuân Thụy\",\"age\":22}"))
+                        .content("""
+                                {
+                                  "name": "Nguyễn Xuân Thụy",
+                                  "age": 22
+                                }
+                                """))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(123))
                 .andExpect(jsonPath("$.data.name").value("Nguyễn Xuân Thụy"))
@@ -60,7 +79,12 @@ class StudentControllerTest extends ApplicationTest {
         mockMvc.perform(MockMvcRequestBuilders.put("/students/124")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Nguyễn Xuân Thụy\",\"age\":22}"))
+                        .content("""
+                                {
+                                  "name": "Nguyễn Xuân Thụy",
+                                  "age": 22
+                                }
+                                """))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.data").doesNotExist())
                 .andExpect(jsonPath("$.meta.code").value(Constant.PREFIX_RESPONSE_CODE + ErrorCode.DATA_NOT_FOUND.code()));
