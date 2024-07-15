@@ -23,6 +23,7 @@
         <java.version>17</java.version>
         <lombok.version>1.18.28</lombok.version>
         <caffeine.version>3.1.7</caffeine.version>
+        <dsl-json.version>2.0.2</dsl-json.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <hibernate-type.version>2.21.1</hibernate-type.version>
         <testcontainers.version>1.19.1</testcontainers.version>
@@ -69,6 +70,11 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${org.mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dslplatform</groupId>
+                <artifactId>dsl-json</artifactId>
+                <version>${dsl-json.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.ben-manes.caffeine</groupId>

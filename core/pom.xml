@@ -33,6 +33,10 @@
             <artifactId>mapstruct-processor</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.dslplatform</groupId>
+            <artifactId>dsl-json</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.toannq</groupId>
             <artifactId>commons</artifactId>
         </dependency>

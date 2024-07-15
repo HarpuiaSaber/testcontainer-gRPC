@@ -1,20 +1,24 @@
 package com.toannq.test.commons.model.response;
 
 
+import com.dslplatform.json.CompiledJson;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.toannq.test.commons.exception.BusinessErrorCode;
 import com.toannq.test.commons.exception.BusinessException;
 import com.toannq.test.commons.exception.FieldViolation;
 import com.toannq.test.commons.util.Constant;
+import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+@Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@CompiledJson(objectFormatPolicy = CompiledJson.ObjectFormatPolicy.MINIMAL)
 public class Response<T> {
     private T data;
     private Metadata meta = new Metadata();
 
-    //    @CompiledJson
     public Response(T data, Metadata meta) {
         this.data = data;
         this.meta = meta;
@@ -27,23 +31,22 @@ public class Response<T> {
         return ofSucceeded((T) null);
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> Response<T> ofSucceeded(T data) {
-        Response<T> response = new Response<>();
+        var response = new Response<T>();
         response.data = data;
         response.meta.code = Metadata.OK_CODE;
         return response;
     }
 
-//    public static <T> Response<List<T>> ofSucceeded(Page<T> data) {
-//        Response<List<T>> response = new Response<>();
-//        response.data = data.getContent();
-//        response.meta.code = Metadata.OK_CODE;
-//        response.meta.page = data.getNumber();
-//        response.meta.size = data.getSize();
-//        response.meta.total = data.getTotalElements();
-//        return response;
-//    }
+    public static <T> Response<List<T>> ofSucceeded(Page<T> data) {
+        Response<List<T>> response = new Response<>();
+        response.data = data.getContent();
+        response.meta.code = Metadata.OK_CODE;
+        response.meta.page = data.getNumber();
+        response.meta.size = data.getSize();
+        response.meta.total = data.getTotalElements();
+        return response;
+    }
 
     public static Response<Void> ofFailed(BusinessErrorCode errorCode) {
         return ofFailed(errorCode, (String) null);
@@ -69,15 +72,9 @@ public class Response<T> {
         return ofFailed(exception.getErrorCode(), exception.getMessage());
     }
 
-    public T getData() {
-        return data;
-    }
-
-    public Metadata getMeta() {
-        return meta;
-    }
-
+    @Getter
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @CompiledJson(objectFormatPolicy = CompiledJson.ObjectFormatPolicy.MINIMAL)
     public static class Metadata {
         public static final String OK_CODE = Constant.PREFIX_RESPONSE_CODE + 200;
         String code;
@@ -90,7 +87,6 @@ public class Response<T> {
         public Metadata() {
         }
 
-        //        @CompiledJson
         public Metadata(String code, Integer page, Integer size, Long total, String message, List<FieldViolation> errors) {
             this.code = code;
             this.page = page;
@@ -100,28 +96,5 @@ public class Response<T> {
             this.errors = errors;
         }
 
-        public String getCode() {
-            return code;
-        }
-
-        public Integer getPage() {
-            return page;
-        }
-
-        public Integer getSize() {
-            return size;
-        }
-
-        public Long getTotal() {
-            return total;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public List<FieldViolation> getErrors() {
-            return errors;
-        }
     }
 }

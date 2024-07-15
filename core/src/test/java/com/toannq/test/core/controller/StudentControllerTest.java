@@ -19,7 +19,7 @@ class StudentControllerTest extends ApplicationTest {
 
     @Test
     @Sql(statements = {"truncate table student restart identity"})
-    void createStudent() throws Exception {
+    void createStudent_Success() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/students")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -56,7 +56,7 @@ class StudentControllerTest extends ApplicationTest {
     @Test
     @Sql(statements = {"truncate table student restart identity",
             "insert into student(id, name, age, major_id, mentor_id) values(123, 'Lê Tuấn Khanh', 20, 1, 1)"})
-    void updateStudent() throws Exception {
+    void updateStudent_Success() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/students/123")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -75,7 +75,7 @@ class StudentControllerTest extends ApplicationTest {
     @Test
     @Sql(statements = {"truncate table student restart identity",
             "insert into student(id, name, age, major_id, mentor_id) values(123, 'Lê Tuấn Khanh', 20, 1, 1)"})
-    void updateStudentNotFound() throws Exception {
+    void updateStudent_NotFound() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/students/124")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -93,7 +93,7 @@ class StudentControllerTest extends ApplicationTest {
     @Test
     @Sql(statements = {"truncate table student restart identity",
             "insert into student(id, name, age, major_id, mentor_id) values(123, 'Lê Tuấn Khanh', 20, 1, 1)"})
-    void deleteStudent() throws Exception {
+    void deleteStudent_Success() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/students/123")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -102,7 +102,7 @@ class StudentControllerTest extends ApplicationTest {
     @Test
     @Sql(statements = {"truncate table student restart identity",
             "insert into student(id, name, age, major_id, mentor_id) values(123, 'Lê Tuấn Khanh', 20, 1, 1)"})
-    void deleteStudentNotFound() throws Exception {
+    void deleteStudent_NotFound() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/students/124")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -113,7 +113,7 @@ class StudentControllerTest extends ApplicationTest {
     @Test
     @Sql(statements = {"truncate table student restart identity",
             "insert into student(id, name, age, major_id, mentor_id) values(123, 'Lê Tuấn Khanh', 20, 1, 1)"})
-    void getStudent() throws Exception {
+    void getStudent_Success() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/students/123")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -131,7 +131,7 @@ class StudentControllerTest extends ApplicationTest {
     @Test
     @Sql(statements = {"truncate table student restart identity",
             "insert into student(id, name, age, major_id, mentor_id) values(123, 'Lê Tuấn Khanh', 20, 1, 1)"})
-    void getDetailStudent() throws Exception {
+    void getDetailStudent_Success() throws Exception {
         var mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/students/123/detail")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(request().asyncStarted())
@@ -149,7 +149,7 @@ class StudentControllerTest extends ApplicationTest {
     @Test
     @Sql(statements = {"truncate table student restart identity",
             "insert into student(id, name, age, major_id, mentor_id) values(123, 'Lê Tuấn Khanh', 20, 2, 1)"})
-    void getDetailStudentOnMajorNotFound() throws Exception {
+    void getDetailStudent_MajorNotFound() throws Exception {
         var mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/students/123/detail")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(request().asyncStarted())
@@ -163,7 +163,7 @@ class StudentControllerTest extends ApplicationTest {
     @Test
     @Sql(statements = {"truncate table student restart identity",
             "insert into student(id, name, age, major_id, mentor_id) values(123, 'Lê Tuấn Khanh', 20, 99, 1)"})
-    void getDetailStudentOnMajorTimeOut() throws Exception {
+    void getDetailStudent_MajorTimeOut() throws Exception {
         var mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/students/123/detail")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(request().asyncStarted())
@@ -177,7 +177,7 @@ class StudentControllerTest extends ApplicationTest {
     @Test
     @Sql(statements = {"truncate table student restart identity",
             "insert into student(id, name, age, major_id, mentor_id) values(123, 'Lê Tuấn Khanh', 20, 1, 2)"})
-    void getDetailStudentOnMentorNotFound() throws Exception {
+    void getDetailStudent_MentorNotFound() throws Exception {
         var mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/students/123/detail")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(request().asyncStarted())
@@ -191,7 +191,7 @@ class StudentControllerTest extends ApplicationTest {
     @Test
     @Sql(statements = {"truncate table student restart identity",
             "insert into student(id, name, age, major_id, mentor_id) values(123, 'Lê Tuấn Khanh', 20, 1, 99)"})
-    void getDetailStudentOnMentorTimeOut() throws Exception {
+    void getDetailStudent_MentorTimeOut() throws Exception {
         var mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/students/123/detail")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(request().asyncStarted())
